@@ -18,10 +18,20 @@ import Card from '../components/Card';
 import Header from '../components/Header';
 
 const Home: NextPage = () => {
+  // state set up for the number of iems of each type tht user can add to the cart,
+  // here apple,orango,mangoand banana are the 4 items
   const [apples, setApples] = useState(0);
   const [oranges, setOranges] = useState(0);
   const [mango, setMango] = useState(0);
   const [banana, setBanana] = useState(0);
+
+  // set up the intial state for the form where the user can add todays Price and Offer for an item
+  const [applePrice, setApplePrice] = useState(50);
+  const [appleOffer, setAppleOffer] = useState(150);
+  const [orangePrice, setOrangePrice] = useState(50);
+  const [orangeOffer, setOrangeOffer] = useState(45);
+  const [mangoPrice, setMangoPrice] = useState(20);
+  const [bananaPrice, setBananaPrice] = useState(15);
 
   return (
     <div>
@@ -179,8 +189,10 @@ const Home: NextPage = () => {
                   alignSelf='stretch'
                   bgColor='surface'
                   type='text'
-                  // value={email}
-                  // onChange={handleEmailInputChange}
+                  value={applePrice}
+                  onChange={(event) =>
+                    setApplePrice(Number(event.target.value))
+                  }
                   variant='outline'
                   placeholder='Enter Price for Apple'
                   size='lg'
@@ -197,8 +209,10 @@ const Home: NextPage = () => {
                   alignSelf='stretch'
                   bgColor='surface'
                   type='text'
-                  // value={email}
-                  // onChange={handleEmailInputChange}
+                  value={appleOffer}
+                  onChange={(event) =>
+                    setAppleOffer(Number(event.target.value))
+                  }
                   variant='outline'
                   placeholder='3 apples for'
                   size='lg'
@@ -217,8 +231,10 @@ const Home: NextPage = () => {
                   alignSelf='stretch'
                   bgColor='surface'
                   type='text'
-                  // value={email}
-                  // onChange={handleEmailInputChange}
+                  value={orangePrice}
+                  onChange={(event) =>
+                    setOrangePrice(Number(event.target.value))
+                  }
                   variant='outline'
                   placeholder='Enter Price for Oranges'
                   size='lg'
@@ -235,8 +251,10 @@ const Home: NextPage = () => {
                   alignSelf='stretch'
                   bgColor='surface'
                   type='text'
-                  // value={email}
-                  // onChange={handleEmailInputChange}
+                  value={orangeOffer}
+                  onChange={(event) =>
+                    setOrangeOffer(Number(event.target.value))
+                  }
                   variant='outline'
                   placeholder='3 Oranges for'
                   size='lg'
@@ -253,8 +271,8 @@ const Home: NextPage = () => {
               alignSelf='stretch'
               bgColor='surface'
               type='text'
-              // value={email}
-              // onChange={handleEmailInputChange}
+              value={mangoPrice}
+              onChange={(event) => setMangoPrice(Number(event.target.value))}
               variant='outline'
               placeholder='Enter Price for Mangoes'
               size='lg'
@@ -269,8 +287,8 @@ const Home: NextPage = () => {
               alignSelf='stretch'
               bgColor='surface'
               type='text'
-              // value={email}
-              // onChange={handleEmailInputChange}
+              value={bananaPrice}
+              onChange={(event) => setBananaPrice(Number(event.target.value))}
               variant='outline'
               placeholder='Enter Price for Bananas'
               size='lg'
