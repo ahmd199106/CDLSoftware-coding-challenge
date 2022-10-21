@@ -292,7 +292,7 @@ const Home: NextPage = () => {
                 />
               </VStack>
               <VStack>
-                <Text>Todays Offer for Apple</Text>
+                <Text>Todays Offer for Apple(units of 3)</Text>
                 <Input
                   minW='300px'
                   alignSelf='stretch'
@@ -332,7 +332,7 @@ const Home: NextPage = () => {
                 />
               </VStack>
               <VStack>
-                <Text>Todays Offer for Oranges</Text>
+                <Text>Todays Offer for Oranges(units of 2)</Text>
                 <Input
                   minW='300px'
                   alignSelf='stretch'
@@ -418,6 +418,6 @@ const Home: NextPage = () => {
       </Flex>
     </div>
   );
-};;;;;;;;;;;;;;;;;;;
+};
 
 export default Home;
