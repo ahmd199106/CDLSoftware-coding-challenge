@@ -25,13 +25,60 @@ const Home: NextPage = () => {
   const [mango, setMango] = useState(0);
   const [banana, setBanana] = useState(0);
 
+  console.log(apples, 'apples');
   // set up the intial state for the form where the user can add todays Price and Offer for an item
   const [applePrice, setApplePrice] = useState(50);
   const [appleOffer, setAppleOffer] = useState(150);
-  const [orangePrice, setOrangePrice] = useState(50);
+  const [orangePrice, setOrangePrice] = useState(30);
   const [orangeOffer, setOrangeOffer] = useState(45);
   const [mangoPrice, setMangoPrice] = useState(20);
   const [bananaPrice, setBananaPrice] = useState(15);
+
+  // create a checkoutCartfunction that takes the number of items as the first 4 arguments and
+  //  a priceSchema object as 5th argument and returns the total value of all the items(of the cart)
+  //  before discount based on the above priceSchema derived from the user Inputs
+  const checkoutCart = (
+    A: number,
+    B: number,
+    C: number,
+    D: number,
+    priceSchema: {
+      priceProductA: number;
+      priceProductB: number;
+      priceProductC: number;
+      priceProductD: number;
+    },
+  ) => {
+    let sum =
+      A * priceSchema.priceProductA +
+      B * priceSchema.priceProductB +
+      C * priceSchema.priceProductC +
+      D * priceSchema.priceProductD;
+    return Number(sum);
+  };
+
+  // create a priceSchema object for todays Price of the 4 items(apples, oranges, mango, banana in this project)
+  let priceschematoday = {
+    priceProductA: applePrice,
+    priceProductB: orangePrice,
+    priceProductC: mangoPrice,
+    priceProductD: bananaPrice,
+  };
+
+  let totalPriceBeforeDiscount = checkoutCart(
+    apples,
+    oranges,
+    mango,
+    banana,
+    priceschematoday,
+  );
+  // console.log(checkoutCart(
+  //   apples,
+  //   oranges,
+  //   mango,
+  //   banana,
+  //   priceschematoday,
+  // ),'tootalprice')
 
   return (
     <div>
