@@ -13,22 +13,21 @@ import {
 } from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Card from '../components/Card';
 import Header from '../components/Header';
 
 const Home: NextPage = () => {
   // state set up for the number of iems of each type tht user can add to the cart,
   // here apple,orango,mangoand banana are the 4 items
-  const [apples, setApples] = useState(0);
+  const [apples, setApples] = useState<number>(0);
   const [oranges, setOranges] = useState(0);
   const [mango, setMango] = useState(0);
   const [banana, setBanana] = useState(0);
 
-  console.log(apples, 'apples');
   // set up the intial state for the form where the user can add todays Price and Offer for an item
   const [applePrice, setApplePrice] = useState(50);
-  const [appleOffer, setAppleOffer] = useState(150);
+  const [appleOffer, setAppleOffer] = useState(130);
   const [orangePrice, setOrangePrice] = useState(30);
   const [orangeOffer, setOrangeOffer] = useState(45);
   const [mangoPrice, setMangoPrice] = useState(20);
@@ -54,7 +53,7 @@ const Home: NextPage = () => {
       B * priceSchema.priceProductB +
       C * priceSchema.priceProductC +
       D * priceSchema.priceProductD;
-    return Number(sum);
+    return sum;
   };
 
   // create a priceSchema object for todays Price of the 4 items(apples, oranges, mango, banana in this project)
@@ -72,13 +71,58 @@ const Home: NextPage = () => {
     banana,
     priceschematoday,
   );
-  // console.log(checkoutCart(
-  //   apples,
-  //   oranges,
-  //   mango,
-  //   banana,
-  //   priceschematoday,
-  // ),'tootalprice')
+  // function to calculate discount in apple enclosed in useCallback to avoid re render of component when state changes
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const discountApple = useCallback(() => {
+    let discuente = 0;
+    if (apples % 3 === 0) {
+      return (discuente += (3 * applePrice - appleOffer) * (apples / 3));
+    }
+    if (apples / 3 > 1 || apples / 3 > 2 || apples / 3 > 3 || apples / 3 > 4) {
+      if (apples % 3 === 0) {
+        return discuente;
+      }
+      discuente += Math.floor(apples / 3) * (3 * applePrice - appleOffer);
+    }
+
+    return discuente;
+  }, [appleOffer, applePrice, apples]);
+
+  // useEffect with a clean up function returned to mitigate memory leaks
+
+  useEffect(() => {
+    let isMounted = true;
+
+    discountApple();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [apples, discountApple]);
+
+  // function to calculate discount in oranges
+  const discountOrange = () => {
+    let discount = 0;
+    if (oranges % 2 === 0) {
+      return (discount = (2 * orangePrice - orangeOffer) * (oranges / 2));
+    }
+    if (
+      oranges / 2 > 1 ||
+      oranges / 2 > 2 ||
+      oranges / 2 > 3 ||
+      oranges / 2 > 4
+    ) {
+      if (oranges % 2 === 0) {
+        return discount;
+      }
+      discount += Math.floor(oranges / 2) * (2 * orangePrice - orangeOffer);
+    }
+
+    return discount;
+  };
+
+  const discountApples = discountApple();
+  const discountOranges = discountOrange();
 
   return (
     <div>
@@ -90,7 +134,6 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Header />
-      {/* <div>hello</div> */}
       <Flex rounded={['none', 'md']} p='6' bgColor='white' direction='column'>
         <Flex alignItems='center'>
           <Heading fontSize='lg' ml='3'>
@@ -235,7 +278,6 @@ const Home: NextPage = () => {
                   minW='300px'
                   alignSelf='stretch'
                   bgColor='surface'
-                  type='text'
                   value={applePrice}
                   onChange={(event) =>
                     setApplePrice(Number(event.target.value))
@@ -255,7 +297,6 @@ const Home: NextPage = () => {
                   minW='300px'
                   alignSelf='stretch'
                   bgColor='surface'
-                  type='text'
                   value={appleOffer}
                   onChange={(event) =>
                     setAppleOffer(Number(event.target.value))
@@ -277,7 +318,6 @@ const Home: NextPage = () => {
                   minW='300px'
                   alignSelf='stretch'
                   bgColor='surface'
-                  type='text'
                   value={orangePrice}
                   onChange={(event) =>
                     setOrangePrice(Number(event.target.value))
@@ -297,7 +337,6 @@ const Home: NextPage = () => {
                   minW='300px'
                   alignSelf='stretch'
                   bgColor='surface'
-                  type='text'
                   value={orangeOffer}
                   onChange={(event) =>
                     setOrangeOffer(Number(event.target.value))
@@ -317,7 +356,6 @@ const Home: NextPage = () => {
               maxW='400px'
               alignSelf='stretch'
               bgColor='surface'
-              type='text'
               value={mangoPrice}
               onChange={(event) => setMangoPrice(Number(event.target.value))}
               variant='outline'
@@ -333,7 +371,6 @@ const Home: NextPage = () => {
               maxW='400px'
               alignSelf='stretch'
               bgColor='surface'
-              type='text'
               value={bananaPrice}
               onChange={(event) => setBananaPrice(Number(event.target.value))}
               variant='outline'
@@ -348,37 +385,39 @@ const Home: NextPage = () => {
           <Flex direction='column' flexGrow={1}>
             <Flex>
               <Box>
-                <Text fontSize='2xl'>cost of all products </Text>
+                <Text fontSize='2xl'>Cost of all products </Text>
               </Box>
               <Spacer />
-              <Text>cost</Text>
+              <Text fontWeight={700}>{totalPriceBeforeDiscount}</Text>
             </Flex>
             <Flex>
               <Box>
-                <Text fontSize='2xl'>Promotional discount apple</Text>
+                <Text fontSize='xl'>Promotional discount apple</Text>
               </Box>
               <Spacer />
-              <Text>cost</Text>
+              <Text>{discountApples}</Text>
             </Flex>
             <Flex>
               <Box>
-                <Text fontSize='2xl'>Promotional discount Orange</Text>
+                <Text fontSize='xl'>Promotional discount Orange</Text>
               </Box>
               <Spacer />
-              <Text>cost</Text>
+              <Text>{discountOranges}</Text>
             </Flex>
             <Flex>
               <Box>
                 <Text fontSize='2xl'>Total Cost of all products </Text>
               </Box>
               <Spacer />
-              <Text>cost</Text>
+              <Text fontWeight={700}>
+                {totalPriceBeforeDiscount - (discountApples + discountOranges)}
+              </Text>
             </Flex>
           </Flex>
         </Flex>
       </Flex>
     </div>
   );
-};
+};;;;;;;;;;;;;;;;;;;
 
 export default Home;
