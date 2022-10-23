@@ -1,12 +1,8 @@
 import { Flex } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 
-interface Props {
-  // any props that come into the component
-  children?: ReactNode;
-}
 
-const Card: React.FC<Props> = ({ children, ...props }) => {
+const Card = ({ children }: { children: React.ReactNode }) => {
   return (
     <Flex
       bgColor='surfaceVariant'
@@ -22,7 +18,6 @@ const Card: React.FC<Props> = ({ children, ...props }) => {
       fontFamily='Euclid'
       fontSize={['sm', 'md']}
       pt='20px'
-      {...props}
     >
       {children}
     </Flex>
