@@ -10,6 +10,7 @@ import {
   Image,
   Input,
   Box,
+  HStack,
 } from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -28,8 +29,10 @@ const Home: NextPage = () => {
   // set up the intial state for the form where the user can add todays Price and Offer for an item
   const [applePrice, setApplePrice] = useState(50);
   const [appleOffer, setAppleOffer] = useState(130);
+  const [appleOfferQuantity, setAppleOfferQuantity] = useState(3);
   const [orangePrice, setOrangePrice] = useState(30);
   const [orangeOffer, setOrangeOffer] = useState(45);
+  const [orangeOfferQuantity, setOrangeOfferQuantity] = useState(2);
   const [mangoPrice, setMangoPrice] = useState(20);
   const [bananaPrice, setBananaPrice] = useState(15);
 
@@ -75,18 +78,27 @@ const Home: NextPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const discountApple = useCallback(() => {
     let discuente = 0;
-    if (apples % 3 === 0) {
-      return (discuente += (3 * applePrice - appleOffer) * (apples / 3));
+    if (apples % appleOfferQuantity === 0) {
+      return (discuente +=
+        (appleOfferQuantity * applePrice - appleOffer) *
+        (apples / appleOfferQuantity));
     }
-    if (apples / 3 > 1 || apples / 3 > 2 || apples / 3 > 3 || apples / 3 > 4) {
-      if (apples % 3 === 0) {
+    if (
+      apples / appleOfferQuantity > 1 ||
+      apples / appleOfferQuantity > 2 ||
+      apples / appleOfferQuantity > 3 ||
+      apples / appleOfferQuantity > 4
+    ) {
+      if (apples % appleOfferQuantity === 0) {
         return discuente;
       }
-      discuente += Math.floor(apples / 3) * (3 * applePrice - appleOffer);
+      discuente +=
+        Math.floor(apples / appleOfferQuantity) *
+        (appleOfferQuantity * applePrice - appleOffer);
     }
 
     return discuente;
-  }, [appleOffer, applePrice, apples]);
+  }, [appleOffer, applePrice, apples, appleOfferQuantity]);
 
   // useEffect with a clean up function returned to mitigate memory leaks
 
@@ -103,19 +115,23 @@ const Home: NextPage = () => {
   // function to calculate discount in oranges
   const discountOrange = () => {
     let discount = 0;
-    if (oranges % 2 === 0) {
-      return (discount = (2 * orangePrice - orangeOffer) * (oranges / 2));
+    if (oranges % orangeOfferQuantity === 0) {
+      return (discount =
+        (orangeOfferQuantity * orangePrice - orangeOffer) *
+        (oranges / orangeOfferQuantity));
     }
     if (
-      oranges / 2 > 1 ||
-      oranges / 2 > 2 ||
-      oranges / 2 > 3 ||
-      oranges / 2 > 4
+      oranges / orangeOfferQuantity > 1 ||
+      oranges / orangeOfferQuantity > 2 ||
+      oranges / orangeOfferQuantity > 3 ||
+      oranges / orangeOfferQuantity > 4
     ) {
-      if (oranges % 2 === 0) {
+      if (oranges % orangeOfferQuantity === 0) {
         return discount;
       }
-      discount += Math.floor(oranges / 2) * (2 * orangePrice - orangeOffer);
+      discount +=
+        Math.floor(oranges / orangeOfferQuantity) *
+        (orangeOfferQuantity * orangePrice - orangeOffer);
     }
 
     return discount;
@@ -271,11 +287,14 @@ const Home: NextPage = () => {
             >
               Enter Todays Prices for Fruits and Offers
             </Heading>
-            <Flex direction='row'>
-              <VStack mr='50px' justify='flex-start'>
-                <Text justifyContent='left'>Price for Apple</Text>
+            <Flex direction='column'>
+              <HStack pr='150px' justify='space-between'>
+                <Text width='200px' justifyContent='left'>
+                  Price for Apple
+                </Text>
                 <Input
-                  minW='300px'
+                  width='100px'
+                  w='100px'
                   alignSelf='stretch'
                   bgColor='surface'
                   value={applePrice}
@@ -290,32 +309,50 @@ const Home: NextPage = () => {
                     borderColor: 'secondary',
                   }}
                 />
-              </VStack>
-              <VStack>
-                <Text>Todays Offer for Apple(units of 3)</Text>
-                <Input
-                  minW='300px'
-                  alignSelf='stretch'
-                  bgColor='surface'
-                  value={appleOffer}
-                  onChange={(event) =>
-                    setAppleOffer(Number(event.target.value))
-                  }
-                  variant='outline'
-                  placeholder='3 apples for'
-                  size='lg'
-                  isRequired
-                  _focus={{
-                    borderColor: 'secondary',
-                  }}
-                />
-              </VStack>
+              </HStack>
+              <HStack pr='150px' justify='space-between'>
+                <Text>Todays Offer for Apple</Text>
+                <Flex align='center'>
+                  <Input
+                    width='50px'
+                    alignSelf='stretch'
+                    bgColor='surface'
+                    value={appleOfferQuantity}
+                    onChange={(event) =>
+                      setAppleOfferQuantity(Number(event.target.value))
+                    }
+                    placeholder='2'
+                    variant='outline'
+                    isRequired
+                    _focus={{
+                      borderColor: 'secondary',
+                    }}
+                  />
+                  <Text>For</Text>
+                  <Input
+                    width='100px'
+                    alignSelf='stretch'
+                    bgColor='surface'
+                    value={appleOffer}
+                    onChange={(event) =>
+                      setAppleOffer(Number(event.target.value))
+                    }
+                    variant='outline'
+                    placeholder='3 apples for'
+                    size='lg'
+                    isRequired
+                    _focus={{
+                      borderColor: 'secondary',
+                    }}
+                  />
+                </Flex>
+              </HStack>
             </Flex>
-            <Flex direction='row' textAlign='start'>
-              <VStack mr='50px' justify='flex-start'>
+            <Flex direction='column' textAlign='start'>
+              <HStack pr='150px' justify='space-between'>
                 <Text>Price for Oranges</Text>
                 <Input
-                  minW='300px'
+                  width='100px'
                   alignSelf='stretch'
                   bgColor='surface'
                   value={orangePrice}
@@ -330,57 +367,79 @@ const Home: NextPage = () => {
                     borderColor: 'secondary',
                   }}
                 />
-              </VStack>
-              <VStack>
-                <Text>Todays Offer for Oranges(units of 2)</Text>
-                <Input
-                  minW='300px'
-                  alignSelf='stretch'
-                  bgColor='surface'
-                  value={orangeOffer}
-                  onChange={(event) =>
-                    setOrangeOffer(Number(event.target.value))
-                  }
-                  variant='outline'
-                  placeholder='3 Oranges for'
-                  size='lg'
-                  isRequired
-                  _focus={{
-                    borderColor: 'secondary',
-                  }}
-                />
-              </VStack>
+              </HStack>
+              <HStack pr='150px' justify='space-between'>
+                <Text>Todays Offer for Oranges</Text>
+                <Flex align='center'>
+                  <Input
+                    width='50px'
+                    alignSelf='stretch'
+                    bgColor='surface'
+                    value={orangeOfferQuantity}
+                    onChange={(event) =>
+                      setOrangeOfferQuantity(Number(event.target.value))
+                    }
+                    placeholder='2'
+                    variant='outline'
+                    isRequired
+                    _focus={{
+                      borderColor: 'secondary',
+                    }}
+                  />
+                  <Text>For</Text>
+                  <Input
+                    width='100px'
+                    alignSelf='stretch'
+                    bgColor='surface'
+                    value={orangeOffer}
+                    onChange={(event) =>
+                      setOrangeOffer(Number(event.target.value))
+                    }
+                    variant='outline'
+                    placeholder='3 Oranges for'
+                    size='lg'
+                    isRequired
+                    _focus={{
+                      borderColor: 'secondary',
+                    }}
+                  />
+                </Flex>
+              </HStack>
             </Flex>
-            <Text textAlign='start'>Price for Mangoes</Text>
-            <Input
-              maxW='400px'
-              alignSelf='stretch'
-              bgColor='surface'
-              value={mangoPrice}
-              onChange={(event) => setMangoPrice(Number(event.target.value))}
-              variant='outline'
-              placeholder='Enter Price for Mangoes'
-              size='lg'
-              isRequired
-              _focus={{
-                borderColor: 'secondary',
-              }}
-            />
-            <Text>Price for Bananas</Text>
-            <Input
-              maxW='400px'
-              alignSelf='stretch'
-              bgColor='surface'
-              value={bananaPrice}
-              onChange={(event) => setBananaPrice(Number(event.target.value))}
-              variant='outline'
-              placeholder='Enter Price for Bananas'
-              size='lg'
-              isRequired
-              _focus={{
-                borderColor: 'secondary',
-              }}
-            />
+            <HStack pr='150px' justify='space-between'>
+              <Text textAlign='start'>Price for Mangoes</Text>
+              <Input
+                width='100px'
+                alignSelf='stretch'
+                bgColor='surface'
+                value={mangoPrice}
+                onChange={(event) => setMangoPrice(Number(event.target.value))}
+                variant='outline'
+                placeholder='Enter Price for Mangoes'
+                size='lg'
+                isRequired
+                _focus={{
+                  borderColor: 'secondary',
+                }}
+              />
+            </HStack>
+            <HStack pr='150px' justify='space-between'>
+              <Text>Price for Bananas</Text>
+              <Input
+                width='100px'
+                alignSelf='stretch'
+                bgColor='surface'
+                value={bananaPrice}
+                onChange={(event) => setBananaPrice(Number(event.target.value))}
+                variant='outline'
+                placeholder='Enter Price for Bananas'
+                size='lg'
+                isRequired
+                _focus={{
+                  borderColor: 'secondary',
+                }}
+              />
+            </HStack>
           </Flex>
           <Flex direction='column' flexGrow={1}>
             <Flex>
