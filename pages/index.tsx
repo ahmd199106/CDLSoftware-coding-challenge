@@ -150,7 +150,13 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Header />
-      <Flex rounded={['none', 'md']} p='6' bgColor='white' direction='column'>
+      <Flex
+        rounded={['none', 'md']}
+        p='6'
+        bgColor='white'
+        direction='column'
+        className='header'
+      >
         <Flex alignItems='center'>
           <Heading fontSize='lg' ml='3'>
             Shopping Cart{' '}
@@ -188,6 +194,7 @@ const Home: NextPage = () => {
               </Button>
               <Button mx='10pt'>APPLE{apples !== 0 && `(${apples})`}</Button>
               <Button
+                id='addAppleButton'
                 variant='outline'
                 onClick={() => setApples((prev) => prev + 1)}
               >
@@ -454,7 +461,7 @@ const Home: NextPage = () => {
                 <Text fontSize='xl'>Promotional discount apple</Text>
               </Box>
               <Spacer />
-              <Text>{discountApples}</Text>
+              <Text className='appleDiscount'>{discountApples}</Text>
             </Flex>
             <Flex>
               <Box>
@@ -468,7 +475,7 @@ const Home: NextPage = () => {
                 <Text fontSize='2xl'>Total Cost of all products </Text>
               </Box>
               <Spacer />
-              <Text fontWeight={700}>
+              <Text fontWeight={700} className='price'>
                 {totalPriceBeforeDiscount - (discountApples + discountOranges)}
               </Text>
             </Flex>
